@@ -3,11 +3,14 @@ import { Link, useNavigate } from "react-router-dom"; // Import useHistory hook
 import axios from "axios";
 import { message } from 'antd';
 import { useState } from "react";
+import { UseDispatch, useDispatch } from "react-redux";
+import { hideLoading,showLoading } from "../redux/features/alertSlice";
 import "../Css/Login.css";
 
 export default function Register() {
   const [CredentialsData, setCredentialsData] = useState({ name:"",email: "", password: "" });
   const history = useNavigate(); // Initialize useHistory hook
+  const dispatch=useDispatch();
 
   const onChangeHandel = (e) => {
     const { name, value } = e.target;
@@ -22,12 +25,15 @@ export default function Register() {
     e.preventDefault();
 
     try {
+      dispatch(showLoading())
       const response = await axios.post(`/api/auth/user/register`, CredentialsData);
+      dispatch(hideLoading())
       if (response.data.success) {
         message.success("Registered successfully");
         history('/'); // Redirect to home page after successful registration
       }
     } catch (error) {
+      dispatch(hideLoading())
       console.log(error);
       message.error("Something went wrong");
     }
