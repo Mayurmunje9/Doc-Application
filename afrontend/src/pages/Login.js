@@ -69,7 +69,7 @@ export default function Login() {
 
         <button type="submit">Log In</button>
         <div className="registering">
-          Don't have a account? <Link to="/register">Register</Link>{" "}
+          Don't have an account? <Link to="/register">Register</Link>{" "} {/* Corrected Link component */}
         </div>
         <div className="social">
           <div className="go">

@@ -69,6 +69,7 @@ const loginControl = async (req, res) => {
 const authController = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.body.userId });
+    // user.password=undefined
     if (!user) {
       console.log(error);
        res
@@ -77,10 +78,7 @@ const authController = async (req, res) => {
     } else {
       res.status(200).send({
         success: true,
-        Data: {
-          name: user.name,
-          email: user.email,
-        },
+        Data: user
       });
     }
   } catch (error) {

@@ -26,6 +26,8 @@
 }
 .body{
     height: 85dvh;
+    box-shadow: 0 0 2px grey;
+    
 }
 .logo h4{ 
     font-size: 1.5rem;
@@ -55,5 +57,20 @@
     color: rgb(179, 213, 243);
 }
 .active a,.active i{
+
+}
+.header-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0rem;
+    height:3rem;
+}.header-content i{
+    margin-left:67dvw;
+    font-size: 1.3rem;
+}.header-content a{
+    text-decoration: none;
+    text-transform: uppercase;
+    margin-left: 0.3rem;
 
 }

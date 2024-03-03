@@ -36,9 +36,9 @@ export default function App() {
             <Route
               path="/register"
               element={
-                <ProtectedRoute>
+                <PublicRoute>
                   <Register />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
           </Routes>
