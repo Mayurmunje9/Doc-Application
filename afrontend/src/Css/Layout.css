@@ -1,0 +1,59 @@
+.main{
+    padding: 10px;
+    height: 100dvh;
+  
+}
+.layout{
+    display: flex;
+}
+.sidebar{
+    min-height: 100%;
+    background-color: aquamarine;
+    width: 25dvw;
+    border-radius: 5px;
+    box-shadow:0 0 3px gray ;
+
+}
+.content{
+    width: 100%;
+    height: 100%;
+}
+.header{
+    height: 10vh;
+    margin-bottom: 20px;
+    box-shadow: 0 0 2px grey;
+    background-color: aliceblue;
+}
+.body{
+    height: 85dvh;
+}
+.logo h4{ 
+    font-size: 1.5rem;
+    margin: 20px 0px;
+    text-align: center;
+}.menu{
+    margin-top: 4rem;
+}
+
+.menu-item a{
+ 
+    text-decoration: none;
+    font-size: 1.3rem;
+}
+.menu-item{
+    color: white;
+    padding :10px 0;
+    margin-top: 35px;
+}
+.menu-item i{
+    font-size: 1.3rem;
+    margin:0 15px;
+
+}
+.active{
+    background-color: white;
+    color: rgb(179, 213, 243);
+}
+.active a,.active i{
+
+}

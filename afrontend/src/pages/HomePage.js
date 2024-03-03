@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
+import Layout from '../components/Layout'
 export default function HomePage() {
   const getUserDetails=async()=>{
     const token=localStorage.getItem("token")
@@ -20,6 +21,10 @@ getUserDetails();
 }, [])
 
   return (
-    <div >HomePage gfdgfdvgrfdfgdx l</div>
+    <>
+    <Layout/>
+    <div > </div>
+    </>
   )
 }
+
