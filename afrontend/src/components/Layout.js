@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AdminMenu, Sidebarmenu, UserMenu } from "../Data/Data";
 import { useSelector } from "react-redux";
 
-const Layout = () => {
+const Layout = ({children}) => {
   const history = useNavigate();
   const location = useLocation();
   const { user } = useSelector((state) => state.user);
@@ -50,7 +50,7 @@ const Layout = () => {
               <Link to="/profile">{user?.name}</Link>
             </div>
           </div>
-          <div className="body">Body</div>
+          <div className="body">{children}</div>
         </div>
       </div>
     </div>
