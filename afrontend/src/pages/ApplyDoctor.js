@@ -4,6 +4,7 @@ import { Col, Form, Input, Row, TimePicker, Button, message } from "antd";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
+import { useState } from "react";
 import axios from "axios";
 import '../Css/ApplyDoc.css'
 
@@ -12,22 +13,43 @@ const ApplyDoctor = () => {
   const navigate = useNavigate();
 
   const handleFinish = async (values) => {
-   console.log(values)
+    const timings = `${fromTime} - ${toTime}`;
+    const formattedValues = {
+      ...values,
+      timings: {
+        from: fromTime,
+        to: toTime
+      }
+    };
+    console.log("Form Values:", formattedValues);
   };
+  
+  const [fromTime, setFromTime] = useState("");
+  const [toTime, setToTime] = useState("");
+
+  const handleFromTimeChange = (e) => {
+    setFromTime(e.target.value);
+  };
+
+  const handleToTimeChange = (e) => {
+    setToTime(e.target.value);
+  };
+
 
   return (
     <Layout>
-      <Form layout="vertical" onFinish={handleFinish} className="m-3" style={{width:"58dvw",marginTop:"2rem",marginLeft:"3rem"}}>
+  
+      <Form layout="vertical" onFinish={handleFinish} className="" style={{width:"60%",marginTop:"2rem",marginLeft:"10%"}}>
         <h4>Personal Details:</h4>
         <Row gutter={20}>
           <Col xs={24} md={12} lg={8}>
             <Form.Item
-              label={<span style={{ color: 'white' }}>First Name</span>}
-              name="firstName"
+              label={<span style={{ color: 'light' }}>First Name</span>}
+              name="firstName "
               required
               rules={[{ required: true, message: 'Please enter your first name' }]}
             >
-              <Input type="text" placeholder="Your first name" className="placeholder-blue" />
+              <Input type="text" placeholder="Your first name" className="placeholder-blue" style={{ color: 'black' }}/>
             </Form.Item>
           </Col>
           <Col xs={24} md={12} lg={8}>
@@ -37,7 +59,7 @@ const ApplyDoctor = () => {
               required
               rules={[{ required: true, message: 'Please enter your last name' }]}
             >
-              <Input type="text" placeholder="Your last name" className="placeholder-blue" />
+              <Input type="text" placeholder="Your last name" className="placeholder-blue color" />
             </Form.Item>
           </Col>
           <Col xs={24} md={12} lg={8}>
@@ -111,18 +133,21 @@ const ApplyDoctor = () => {
               <Input type="number" placeholder="Fees per consultation" className="placeholder-blue" />
             </Form.Item>
           </Col>
+          
           <Col xs={24} md={12} lg={8}>
-            <Form.Item
-              label={<span style={{ color: 'white' }}>Timings</span>}
-              name="timings"
-              required
-            >
-              <TimePicker.RangePicker format="HH:mm" className="placeholder-blue" />
+     
+            <Form.Item label={<span style={{ color: 'white' }} name="timmings">From</span>}>
+              <Input type="time" onChange={handleFromTimeChange} />
+            </Form.Item>
+            <Form.Item label={<span style={{ color: 'white' }}name="timmings">To</span>}>
+              <Input type="time" onChange={handleToTimeChange} />
             </Form.Item>
           </Col>
+
+      
         </Row>
         <div className="text-center">
-          <Button type="primary" htmlType="submit">Submit</Button>
+          <Button type="primary" htmlType="submit" style={{width:"25%"}}>Submit</Button>
         </div>
       </Form>
     </Layout>

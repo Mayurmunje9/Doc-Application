@@ -1,4 +1,15 @@
 .placeholder-blue::placeholder {
     color: blue;
   }
-  
+  .ant-input {
+    color: black;
+  }
+ /* For placeholder text */
+.custom-timepicker .ant-picker-input input::placeholder {
+  color: blue;
+}
+
+/* For entered time */
+.custom-timepicker .ant-picker-input input {
+  color: black; /* Change this to the desired color for entered time */
+}

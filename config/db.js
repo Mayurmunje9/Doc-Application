@@ -9,4 +9,4 @@ const connectToDb =async()=>{
         console.log(`MongoDb servrt issue ${error}`);
     }
 }
-module.exports=connectToDb;
+module.exports=connectToDb; 
