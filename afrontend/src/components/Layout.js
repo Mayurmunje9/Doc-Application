@@ -4,7 +4,7 @@ import "../Css/Layout.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AdminMenu, Sidebarmenu, UserMenu } from "../Data/Data";
 import { useSelector } from "react-redux";
-
+import { Badge,Avatar } from "antd";
 const Layout = ({children}) => {
   const history = useNavigate();
   const location = useLocation();
@@ -46,7 +46,10 @@ const Layout = ({children}) => {
         <div className="content">
           <div className="header">
             <div className="header-content">
+            <Badge count={user&& user.notification.length}>
+      {/* <Avatar shape="square" size="large" /> */}
               <i className="fa-solid fa-bell"></i>
+    </Badge>
               <Link to="/profile">{user?.name}</Link>
             </div>
           </div>

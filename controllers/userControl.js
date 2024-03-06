@@ -2,6 +2,7 @@ const userModel = require("../models/userModels");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const express = require("express");
+const doctorModel = require("../models/doctorModel");
 const registerControl = async (req, res) => {
   try {
     const existingUser = await userModel.findOne({ email: req.body.email });
@@ -39,6 +40,7 @@ const registerControl = async (req, res) => {
     });
   }
 };
+
 const loginControl = async (req, res) => {
   try {
     const user = await userModel.findOne({ email: req.body.email });
@@ -50,14 +52,16 @@ const loginControl = async (req, res) => {
     //comparing the password of the entered and the user using bycrypt
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (!isMatch) {
-        return res
+      return res
         .status(201)
         .send({ success: false, message: "Invalid Password" });
     }
 
-    const authToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, );
+    const authToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     // console.log(token)
-    res.status(200).send({ success: true, message: "Login Successfull",authToken });
+    res
+      .status(200)
+      .send({ success: true, message: "Login Successfull", authToken });
   } catch (error) {
     console.log(error);
     res
@@ -72,13 +76,13 @@ const authController = async (req, res) => {
     // user.password=undefined
     if (!user) {
       console.log(error);
-       res
+      res
         .status(201)
         .send({ success: false, message: "User Not Found", error });
     } else {
       res.status(200).send({
         success: true,
-        Data: user
+        Data: user,
       });
     }
   } catch (error) {
@@ -88,4 +92,46 @@ const authController = async (req, res) => {
       .send({ success: false, message: "Auth Failed", error });
   }
 };
-module.exports = { loginControl, registerControl, authController };
+
+const applyDoctorController = async (req, res) => {
+  try {
+    const existingDoctor = await doctorModel.findOne({ email: req.body.email });
+    if (existingDoctor) {
+      return res.status(400).send({ success: false, message: "Doctor already exists" });
+    }
+
+    const newDoc = new doctorModel({
+      ...req.body,
+      status: "pending",
+    });
+    
+    await newDoc.save();
+
+    const admin = await userModel.findOne({ isAdmin: true });
+
+    const notification = admin.notification || [];
+    notification.push({
+      type: "apply-doctor-request",
+      message: `${newDoc.firstName} ${newDoc.lastName} has applied for a Doctor Account`,
+      data: {
+        doctorId: newDoc._id,
+        name: newDoc.firstName + " " + newDoc.lastName,
+        onClickPath: "/admin/doctors",
+      },
+    });
+
+    await userModel.findByIdAndUpdate(admin._id, { notification });
+
+    res.status(200).send({ success: true, message: "Doctor registered successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ success: false, error, message: "Error while applying for doctor" });
+  }
+};
+
+module.exports = {
+  loginControl,
+  registerControl,
+  authController,
+  applyDoctorController,
+};
