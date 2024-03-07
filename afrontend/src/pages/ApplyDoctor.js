@@ -39,7 +39,7 @@ const ApplyDoctor = () => {
       );
       dispatch(hideLoading())
       if(res.data.success){
-        message.success(res.data.success)
+        message.success("Applied as a doctor Successfully"+res.data.success)
         navigate('/')
 
       }

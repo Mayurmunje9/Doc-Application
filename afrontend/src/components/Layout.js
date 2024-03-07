@@ -1,7 +1,7 @@
 // Layout.js
 import React from "react";
 import "../Css/Layout.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { AdminMenu, Sidebarmenu, UserMenu } from "../Data/Data";
 import { useSelector } from "react-redux";
 import { Badge,Avatar } from "antd";
@@ -48,7 +48,7 @@ const Layout = ({children}) => {
             <div className="header-content">
             <Badge count={user&& user.notification.length}>
       {/* <Avatar shape="square" size="large" /> */}
-              <i className="fa-solid fa-bell"></i>
+              <i style={{cursor:"pointer"}} className="fa-solid fa-bell" onClick={()=>{history('/notification')}}></i>
     </Badge>
               <Link to="/profile">{user?.name}</Link>
             </div>
