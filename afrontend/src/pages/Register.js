@@ -32,6 +32,10 @@ export default function Register() {
         message.success("Registered successfully");
         history('/'); // Redirect to home page after successful registration
       }
+      if (!response.data.success) {
+        message.error("User already Registered ");
+         // Redirect to home page after successful registration
+      }
     } catch (error) {
       dispatch(hideLoading())
       console.log(error);

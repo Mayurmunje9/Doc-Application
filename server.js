@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 //ROUTES
-
+app.use("/api/auth/admin",require('./routes/adminRoutes'))
  app.use('/api/auth/user',require('./routes/userRoutes'))
 
 //only for testing purpose at the start

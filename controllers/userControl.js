@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const doctorModel = require("../models/doctorModel");
+
+// Register Control
 const registerControl = async (req, res) => {
   try {
     const existingUser = await userModel.findOne({ email: req.body.email });
@@ -40,6 +42,7 @@ const registerControl = async (req, res) => {
     });
   }
 };
+// Login Control
 
 const loginControl = async (req, res) => {
   try {
@@ -69,44 +72,39 @@ const loginControl = async (req, res) => {
       .send({ message: `Error in Login Control ${error.message}` });
   }
 };
-
+// Auth Controller
 const authController = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.body.userId });
-    // user.password=undefined
     if (!user) {
-      console.log(error);
-      res
-        .status(201)
-        .send({ success: false, message: "User Not Found", error });
-    } else {
-      res.status(200).send({
-        success: true,
-        Data: user,
-      });
+      return res
+        .status(404)
+        .send({ success: false, message: "User Not Found" });
     }
+    res.status(200).send({ success: true, Data: user });
   } catch (error) {
-    console.log(error);
-    return res
-      .status(201)
-      .send({ success: false, message: "Auth Failed", error });
+    console.error(error);
+    res.status(500).send({ success: false, message: "Auth Failed", error });
   }
 };
 
+// Apply Doctor Controller
 const applyDoctorController = async (req, res) => {
   try {
     const existingDoctor = await doctorModel.findOne({ email: req.body.email });
     if (existingDoctor) {
-      return res.status(400).send({ success: false, message: "Doctor already exists" });
+      return res
+        .status(400)
+        .send({ success: false, message: "Doctor already exists" });
     }
 
     const newDoc = new doctorModel({
       ...req.body,
       status: "pending",
     });
-    
-    await newDoc.save();
 
+    await newDoc.save();
+    //Finding the admin here and pussing the notification of the doctor
     const admin = await userModel.findOne({ isAdmin: true });
 
     const notification = admin.notification || [];
@@ -115,52 +113,66 @@ const applyDoctorController = async (req, res) => {
       message: `${newDoc.firstName} ${newDoc.lastName} has applied for a Doctor Account`,
       data: {
         doctorId: newDoc._id,
-        name: newDoc.firstName + " " + newDoc.lastName,
+        name: `${newDoc.firstName} ${newDoc.lastName}`,
         onClickPath: "/admin/doctors",
       },
     });
 
     await userModel.findByIdAndUpdate(admin._id, { notification });
 
-    res.status(200).send({ success: true, message: "Doctor registered successfully" });
+    res
+      .status(200)
+      .send({ success: true, message: "Doctor registered successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ success: false, error, message: "Error while applying for doctor" });
+    res
+      .status(500)
+      .send({
+        success: false,
+        error,
+        message: "Error while applying for doctor",
+      });
   }
 };
 
-//Notifications Controller
-const getNotificationsController=async(req,res)=>{
-try {
-  const user=await userModel.findOne({_id:req.body.userId})
-  const  seenNotification=user.seenNotification;
-  const notification=user.notification;
-  seenNotification.push(...notification);
-  user.notification=[];
-  user.seenNotification=notification;
-  const updatedUser=await user.save()
-  res.status(200).send({
-    success:true,message:"Notifications marked as read", data:updatedUser
-  })
-} catch (error) {
-  console.log(error)
-  res.status(500).send({success:false,message:"Unable to Read",error})
-}
+// Get Notifications Controller
+const getNotificationsController = async (req, res) => {
+  try {
+    const user = await userModel.findOne({ _id: req.body.userId });
+    const seenNotification = user.seenNotification;
+    const notification = user.notification;
+    seenNotification.push(...notification);
+    user.notification = [];
+    user.seenNotification = notification;
+    const updatedUser = await user.save();
+    res.status(200).send({
+      success: true,
+      message: "Notifications marked as read",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false, message: "Unable to Read", error });
+  }
+};
 
-//Deete Notofication
-const deleteNotificationsController = async () => {
+// Delete Notifications Controller
+const deleteNotificationController = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.body.userId });
     user.notification = [];
     user.seenNotification = [];
     const updatedUser = await user.save();
-    res.status(200).send({ success: true, message: "Messages deleted", data: updatedUser });
+    res
+      .status(200)
+      .send({ success: true, message: "Messages deleted", data: updatedUser });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ success: false, message: "Unable to delete", error });
+    res
+      .status(500)
+      .send({ success: false, message: "Unable to delete", error });
   }
 };
-}
 
 module.exports = {
   loginControl,
@@ -168,5 +180,5 @@ module.exports = {
   authController,
   applyDoctorController,
   getNotificationsController,
-  deleteNotificationsController
+  deleteNotificationController,
 };

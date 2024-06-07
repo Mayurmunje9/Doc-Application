@@ -1,10 +1,10 @@
 // Layout.js
 import React from "react";
 import "../Css/Layout.css";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AdminMenu, Sidebarmenu, UserMenu } from "../Data/Data";
 import { useSelector } from "react-redux";
-import { Badge,Avatar } from "antd";
+import { Badge } from "antd";
 const Layout = ({children}) => {
   const history = useNavigate();
   const location = useLocation();
@@ -14,7 +14,7 @@ const Layout = ({children}) => {
     history("/login");
   };
   const Sidebarmenu = user?.isAdmin ? AdminMenu : UserMenu;
-  console.log(user)
+  // console.log(user)
 
   return (
     <div className="main">

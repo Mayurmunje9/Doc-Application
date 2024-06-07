@@ -3,12 +3,14 @@ import React from "react";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { UseSelector, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import Spinner from "./components/Spinner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import ApplyDoctor from "./pages/ApplyDoctor";
 import Notification from "./pages/Notification";
+import Users from "./pages/admin/Users";
+import Doctors from "./pages/admin/Doctors";
 export default function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -49,6 +51,22 @@ export default function App() {
               element={
                 <ProtectedRoute>
              <ApplyDoctor/>
+                </ProtectedRoute>
+              }
+            />
+             <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute>
+            <Users/>
+                </ProtectedRoute>
+              }
+            />
+             <Route
+              path="/admin/doctors"
+              element={
+                <ProtectedRoute>
+          <Doctors/>
                 </ProtectedRoute>
               }
             />
