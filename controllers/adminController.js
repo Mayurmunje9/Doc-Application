@@ -25,7 +25,7 @@ const getAllDoctors = async (req, res) => {
 const changeAccountStatus = async (req, res) => {
   try {
     const { doctorId, status } = req.body;
-    const doctor = await doctorModel.findByIdAndUpdate(doctorId, { status }, { new: true });
+    const doctor = await doctorModel.findByIdAndUpdate(doctorId, { status });
 
     if (!doctor) {
       return res.status(404).send({ success: false, message: "Doctor not found" });
@@ -43,7 +43,7 @@ const changeAccountStatus = async (req, res) => {
       onClickPath: '/notification',
     });
 
-    user.isDoctor = status === 'approved';
+    user.isdoctor = status === 'approved'?true:false;
     user.notification = notification;
     await user.save();
 

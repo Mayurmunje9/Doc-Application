@@ -18,7 +18,7 @@ app.use(morgan('dev'))
 //ROUTES
 app.use("/api/auth/admin",require('./routes/adminRoutes'))
  app.use('/api/auth/user',require('./routes/userRoutes'))
-
+app.use('/api/auth/doctor',require("./routes/doctorRoutes"))
 //only for testing purpose at the start
 // app.get('/',(req,res)=>{
 //     res.status(200).send({ 

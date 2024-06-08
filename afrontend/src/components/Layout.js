@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
     history("/login");
   };
 
-  console.log("User:", user);
+  // console.log("User:", user);
 
   //*********Doctor Menu**************/
   const DoctorMenu = [
@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
   : user?.isdoctor
   ? DoctorMenu
   : UserMenu;
-  console.log(Sidebarmenu)
+  // console.log(Sidebarmenu)
   return (
     <div className="main">
       <div className="layout">
