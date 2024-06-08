@@ -13,9 +13,31 @@ const Layout = ({children}) => {
     localStorage.removeItem('token');
     history("/login");
   };
-  const Sidebarmenu = user?.isAdmin ? AdminMenu : UserMenu;
-  // console.log(user)
 
+  // console.log(user)
+  //*********Doctor Menu**************/
+ const DoctorMenu = [
+    {
+      name: "Home",
+      path: "/",
+      icon: "fa-solid fa-house-user",
+    },
+    {
+      name:"Appointments",
+      path:"/appointments",
+      icon:"fa-solid fa-list-ul",
+    },
+    
+    {
+      name:"Profile",
+      path:`/doctor/profile/:${user?._id}`,
+      icon:"fa-regular fa-user"
+    },
+  
+  ];
+    //*********Doctor Menu**************/
+
+    const Sidebarmenu = user?.isAdmin ? AdminMenu : user?.isDoctor?DoctorMenu:UserMenu;
   return (
     <div className="main">
       <div className="layout">

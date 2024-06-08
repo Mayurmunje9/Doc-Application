@@ -1,5 +1,5 @@
 const express = require("express");
-const { loginControl, registerControl, authController, applyDoctorController, getNotificationsController, deleteNotificationController } = require("../controllers/userControl");
+const { loginControl, registerControl, authController, applyDoctorController, getNotificationsController, deleteNotificationController,  } = require("../controllers/userControl");
 const authMiddlewares = require("../middlewares/authMiddlewares");
 
 //Router object
