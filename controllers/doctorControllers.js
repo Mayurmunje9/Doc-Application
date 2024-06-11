@@ -20,7 +20,18 @@ const updateDocProfile = async (req, res) => {
   }
 };
 
+const getDoctorById =async(req,res)=>{
+  try {
+    const doctor=await doctorModel.findOne({_id:req.body.doctorId})
+ 
+    res.status(200).send({ success: true, message: "Got the doctor", data:doctor });
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false, message: "Unable to get the doctor ", error });
+  }
+}
 module.exports = {
   getDoctorInfoController,
-  updateDocProfile
+  updateDocProfile,getDoctorById
 };

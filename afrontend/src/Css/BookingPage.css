@@ -1,0 +1,55 @@
+/* BookingPage.css */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .doctor-details {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .d-flex {
+    display: flex;
+  }
+  
+  .flex-column {
+    flex-direction: column;
+  }
+  
+  .w-50 {
+    width: 50%;
+  }
+  
+  .m-2 {
+    margin: 10px 0;
+  }
+  
+  .mt-2 {
+    margin-top: 10px;
+  }
+  
+  .mt-3 {
+    margin-top: 20px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btn-dark {
+    background-color: #343a40;
+    color: white;
+  }
+  

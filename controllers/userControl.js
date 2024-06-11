@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const doctorModel = require("../models/doctorModel");
+const appointmentModel = require("../models/AppointmentBooking");
+const moment=require('moment')
 
 // Register Control
 const registerControl = async (req, res) => {
@@ -174,11 +176,53 @@ const deleteNotificationController = async (req, res) => {
   }
 };
 
+//GET ALL Doctors ||GET
+const getAllDoctorsController=async (req,res)=>{
+try {
+  const doctors=await doctorModel.find({status:"approved"})
+  res
+  .status(200)
+  .send({ success: true, message: "Got Doctors", data:doctors });
+} catch (error) {
+  console.log("Unable to Get Doctors"+ error);
+  res
+    .status(500)
+    .send({ success: false, message: "Unable to Get Doctors", error });
+}
+}
+
+//Book Appointment
+const bookAppointmentController = async (req, res) => {
+  try {
+    req.body.status = "pending";
+    console.log("Time at backend " + req.body.time, "date ", req.body.date);
+    req.body.date = moment(req.body.date).toISOString();
+    req.body.time = moment(req.body.time).toISOString();
+
+    const newAppointment = new appointmentModel(req.body);
+    await newAppointment.save();
+
+    const user = await userModel.findOne({ _id: req.body.doctorInfo.userId });
+    user.notification.push({
+      type: "New-appointment-request",
+      message: `A new appointment request from ${req.body.userInfo.name}`,
+      onClickPath: "/user/appointments",
+    });
+    await user.save();
+
+    res.status(200).send({ status: true, message: "Appointment Booked", success: true });
+  } catch (error) {
+    console.log("Can't Book Appointment:", error);
+    res.status(500).send({ success: false, message: "Can't Book Appointment", error });
+  }
+};
+
+
 module.exports = {
   loginControl,
   registerControl,
   authController,
   applyDoctorController,
   getNotificationsController,
-  deleteNotificationController,
+  deleteNotificationController,getAllDoctorsController,bookAppointmentController
 };
