@@ -40,7 +40,32 @@ const BookingPage = () => {
   useEffect(() => {
     getDoctor();
   }, []);
-
+ // ============ handle availiblity
+ const handleAvailability = async () => {
+  try {
+    dispatch(showLoading());
+    const res = await axios.post(
+      "/api/auth/user/booking-availbility",
+      { doctorId: params.doctorId, date, time },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    dispatch(hideLoading());
+    if (res.data.success) {
+      setIsAvailable(true);
+      console.log(isAvailable);
+      message.success(res.data.message);
+    } else {
+      message.error(res.data.message);
+    }
+  } catch (error) {
+    dispatch(hideLoading());
+    console.log(error);
+  }
+};
   const handleBooking = async () => {
     try {
       if (!date || !time) {
@@ -94,26 +119,26 @@ const BookingPage = () => {
               <DatePicker
                 className="m-2"
                 format="DD-MM-YYYY"
-                onChange={(value) => setDate(value.format("DD-MM-YYYY"))}
+            
+                onChange={(value) => { 
+                   setDate(value.format("DD-MM-YYYY"))}}
               />
               <TimePicker
                 format="HH:mm"
                 className="mt-3"
-                onChange={(value) => setTime(value.format("HH:mm"))}
+                onChange={(value) =>{ 
+                  setTime(value.format("HH:mm"))}}
               />
               <button
                 className="btn btn-primary mt-2"
-                onClick={() => {
-                  if (date && time) {
-                    setIsAvailable(true);
-                  }
-                }}
+                onClick={handleAvailability}
               >
                 Check Availability
               </button>
-              <button className="btn btn-dark mt-2" onClick={handleBooking}>
+               <button className="btn btn-dark mt-2" onClick={handleBooking}>
                 Book Now
               </button>
+             
             </div>
           </div>
         )}
