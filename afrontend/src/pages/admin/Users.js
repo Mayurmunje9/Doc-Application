@@ -1,55 +1,73 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import React from 'react';
-import axios from "axios"
-import Layout from '../../components/Layout'
+import axios from "axios";
+import Layout from '../../components/Layout';
 import { Table } from 'antd';
-
+import "../../Css/Table.css";
 
 const Users = () => {
-  const [users,setUsers]=useState([])
-  const getAllUsers=async(req,res)=>{
+  const [users, setUsers] = useState([]);
+  
+  const getAllUsers = async () => {
     try {
-      const res=await axios.get('/api/auth/admin/getAllUsers',{
-        headers:{
-          Authorization:`Bearer ${localStorage.getItem('token')}`
+      const res = await axios.get('/api/auth/admin/getAllUsers', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
-      })
-      if(res.data.success){
-        setUsers(res.data.data)
-        // console.log("data"+res.data.data)
-        // console.log(users)
+      });
+      if (res.data.success) {
+        setUsers(res.data.data);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
+
   useEffect(() => {
-  
-    getAllUsers()
-  }, [])
-  
-  //antd tabel col
-  const columns=[
+    getAllUsers();
+    console.log(users);
+  }, []);
+
+  // antd table columns
+  const columns = [
     {
-      title:"Name",dataIndex:'name'
-    },{
-      title:"Email",dataIndex:"email"
-    },{
-      title:"Doctor",dataIndex:"isDoctor",render:(text,record)=> {<span>{record.isdoctor ? "Yes":"No"}</span>}
-    },{
-      title:"Actions",dataIndex:"actions",render:(text,record)=>(
+      title: "Name",
+      dataIndex: 'name'
+    },
+    {
+      title: "Email",
+      dataIndex: "email"
+    },
+    {
+      title: "Doctor",
+      dataIndex: "isdoctor",
+      render: (text, record) => (
+        <span style={{ color: record.isdoctor ? 'green' : 'red' }}>
+          {record.isdoctor ? "Yes" : "No"}
+        </span>
+      )
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      render: (text, record) => (
         <div className="d-flex">
-          <button className='btn btn-danger'>Block</button>
+          <button className='btn btn-danger buttons'>Block</button>
         </div>
       )
     }
-  ]
+  ];
+
   return (
     <Layout>
-    <div className='d-flex justify-content-center'><h1 style={{color:"white"}}>Users</h1></div>
-    <Table columns={columns}dataSource={users}/>
+      <div className='' style={{ color: "white" }}>Users</div>
+      <Table
+        columns={columns}
+        dataSource={users}
+        pagination={{ pageSize: 4 }} // Limit the number of rows per page to 5
+      />
     </Layout>
   )
 }
 
-export default Users
+export default Users;

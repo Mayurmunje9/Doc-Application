@@ -3,7 +3,7 @@ import React from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
 import { Button, Table, message } from "antd";
-
+import "../../Css/Table.css"
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
   
@@ -72,14 +72,19 @@ const Doctors = () => {
       render: (text, record) => (
         <div className="d-flex">
           {record.status === "pending" ? (
+            <>
             <Button
-              className="btn btn-success"
+              className="btn btn-success buttons"
               onClick={() => handleAccountStatus(record, 'approved')}
             >
               Approve
+            </Button> 
+            <Button className="btn btn-danger buttons" onClick={() => handleAccountStatus(record, 'rejected')}>
+              Reject
             </Button>
+            </>
           ) : (
-            <Button className="btn btn-danger" onClick={() => handleAccountStatus(record, 'rejected')}>
+            <Button className="btn btn-danger buttons" onClick={() => handleAccountStatus(record, 'rejected')}>
               Reject
             </Button>
           )}
@@ -90,7 +95,7 @@ const Doctors = () => {
 
   return (
     <Layout>
-      <div>Doctors</div>
+      <div style={{color:"white"}}>Doctors</div>
       <Table columns={columns} dataSource={doctors} />
     </Layout>
   );

@@ -1,0 +1,45 @@
+.ant-table-wrapper {
+    position: relative;
+    right: -1%;
+    top: 3%;
+    width: 94%;
+}
+.buttons{
+    width: 30%;
+    font-size: small;
+    
+
+}
+/* Pagination.css */
+/* Pagination.css */
+
+.ant-pagination {
+   color: #1890ff;
+ 
+  }
+  
+  .ant-pagination-item a {
+    color: black; /* Set text color */
+    background-color: black;
+  }
+  
+  .ant-pagination-item-active a {
+  
+   background-color: white;
+  }
+  
+  .ant-pagination-prev .ant-pagination-item-link,
+  .ant-pagination-next .ant-pagination-item-link {
+    color: white !important; /* Set previous and next button text color */
+  }
+  
+  .ant-pagination-prev,
+  .ant-pagination-next {
+    border-color: white; /* Set previous and next button border color */
+  }
+  
+  .ant-pagination-prev a,
+  .ant-pagination-next a {
+    color: white !important; /* Set previous and next button text color */
+  }
+  

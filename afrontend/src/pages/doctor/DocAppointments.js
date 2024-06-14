@@ -15,14 +15,18 @@ const DocAppointments = () => {
         },
       });
       if (res.data.success) {
+        console.log("API Response Data: ", res.data.data);
         setAppointments(res.data.data);
+        console.log("appointments om set appointments :",appointments)
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching appointments: ", error);
     }
   };
-
-  const handelStatus = async (record, status) => {
+  useEffect(() => {
+    console.log("Updated Appointments State: ", appointments);
+  }, [appointments]);
+  const handleStatus = async (record, status) => {
     try {
       const res = await axios.post(
         '/api/auth/doctor/appointmentStatus',
@@ -39,7 +43,7 @@ const DocAppointments = () => {
         getAppointments();
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error updating appointment status: ", error);
       message.error("Something went wrong: " + error);
     }
   };
@@ -58,13 +62,13 @@ const DocAppointments = () => {
       dataIndex: "name",
       render: (text, record) => (
         <span>
-          {record.doctorId.firstName} {record.doctorId.lastName}
+          {record.userInfo[0].name} {record.doctorId.lastName}
         </span>
       ),
     },
     {
       title: "Phone",
-      dataIndex: "[phone]",
+      dataIndex: "phone",
       render: (text, record) => (
         <span>
           {record.doctorId.phone}
@@ -94,13 +98,13 @@ const DocAppointments = () => {
             <div className="d-flex">
               <Button
                 className="btn btn-success"
-                onClick={() => handelStatus(record, "approve")}
+                onClick={() => handleStatus(record, "approve")}
               >
                 Approve
               </Button>
               <Button
                 className="btn btn-danger ms-2"
-                onClick={() => handelStatus(record, "reject")}
+                onClick={() => handleStatus(record, "reject")}
               >
                 Reject
               </Button>

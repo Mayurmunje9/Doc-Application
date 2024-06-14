@@ -71,14 +71,14 @@ export default function Login() {
         <div className="registering">
           Don't have an account? <Link to="/register">Register</Link>{" "} {/* Corrected Link component */}
         </div>
-        <div className="social">
+        {/* <div className="social">
           <div className="go">
             <i className="fab fa-google"></i> Google
           </div>
           <div className="fb">
             <i className="fab fa-facebook"></i> Facebook
           </div>
-        </div>
+        </div> */}
       </form>
     </div>
   );

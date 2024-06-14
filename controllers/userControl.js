@@ -5,45 +5,47 @@ const express = require("express");
 const doctorModel = require("../models/doctorModel");
 const appointmentModel = require("../models/AppointmentBooking");
 const moment=require('moment')
-
-// Register Control
+//Register Controller
 const registerControl = async (req, res) => {
   try {
-    const existingUser = await userModel.findOne({ email: req.body.email });
-    if (existingUser)
-      return res
-        .status(200)
-        .send({ success: false, message: "User already exist " });
+    console.log('Registering user:', req.body);
 
-    //We will create a salt of upto 10 rouds by genSalt();
+    const existingUser = await userModel.findOne({ email: req.body.email });
+    if (existingUser) {
+      console.log('User already exists:', existingUser);
+      return res.status(200).send({ success: false, message: "User already exists" });
+    }
+
     const salt = await bcrypt.genSalt(10);
-    //Adding that salt to the password using hash() and storing it in hashPassword;
     const securePassword = await bcrypt.hash(req.body.password, salt);
-    //now ew will use this hashPassword always
 
     const newUser = await userModel.create({
       name: req.body.name,
       password: securePassword,
       email: req.body.email,
     });
+
     const data = {
       user: {
-        id: user.id,
+        id: newUser._id,
       },
     };
-    const authToken = jwt.sign(data, JWT_SECRET);
-    console.log(authToken);
-    await newUser.save();
-    return res
-      .status(201)
-      .send({ success: true, message: "Registered uccessfully" + authToken });
+
+    const authToken = jwt.sign(data, process.env.JWT_SECRET); // Ensure JWT_SECRET is defined
+    console.log('User registered successfully. Auth token:', authToken);
+
+    return res.status(200).send({ success: true, message: "Registered successfully", token: authToken });
   } catch (error) {
-    res.status(500).send({
+    console.error('Error in Registering:', error.message); // Log the actual error message
+    return res.status(500).send({
       success: false,
-      message: `Error in Registering ${error.message} `,
+      message: `Error in Registering: ${error.message}`,
     });
   }
 };
+
+
+
 // Login Control
 
 const loginControl = async (req, res) => {

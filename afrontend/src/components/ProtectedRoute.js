@@ -37,6 +37,7 @@ export default function ProtectedRoute({ children }) {
       }
     };
 
+    
     if (!user) {
       getUser();
     }
