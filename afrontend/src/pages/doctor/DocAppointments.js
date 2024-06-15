@@ -15,17 +15,19 @@ const DocAppointments = () => {
         },
       });
       if (res.data.success) {
-        console.log("API Response Data: ", res.data.data);
+        // console.log("API Response Data: ", res.data.data);
         setAppointments(res.data.data);
-        console.log("appointments om set appointments :",appointments)
+        // console.log("appointments om set appointments :",appointments)
       }
     } catch (error) {
       console.log("Error fetching appointments: ", error);
     }
   };
   useEffect(() => {
-    console.log("Updated Appointments State: ", appointments);
+    // console.log("Updated Appointments State: ", appointments);
   }, [appointments]);
+
+
   const handleStatus = async (record, status) => {
     try {
       const res = await axios.post(
