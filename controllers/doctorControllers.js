@@ -1,6 +1,11 @@
 const appointmentModel = require("../models/AppointmentBooking");
 const doctorModel = require("../models/doctorModel");
 const userModel = require("../models/userModels");
+const nodemailer = require('nodemailer');
+const transporter = require('../config/emailConfig'); // Import the email configuration
+const moment = require('moment');
+require('dotenv').config();
+
 
 const getDoctorInfoController = async (req, res) => {
   try {
@@ -49,21 +54,59 @@ const docAppointmentsController=async(req,res)=>{
 const appointmentStatusController = async (req, res) => {
   try {
     const { appointmentId, status } = req.body;
-    const appointments = await appointmentModel.findByIdAndUpdate(appointmentId, { status });
+    const appointment = await appointmentModel.findByIdAndUpdate(appointmentId, { status }, { new: true });
 
-    const user = await userModel.findOne({ _id: appointments.userId });
+    if (!appointment) {
+      console.error("Appointment not found");
+      return res.status(404).send({ success: false, message: "Appointment not found" });
+    }
+
+    const user = await userModel.findById(appointment.userId);
+    if (!user) {
+      console.error("User not found");
+      return res.status(404).send({ success: false, message: "User not found" });
+    }
+
+    const doctor = await doctorModel.findById(appointment.doctorId);
+    if (!doctor) {
+      console.error("Doctor not found");
+      return res.status(404).send({ success: false, message: "Doctor not found" });
+    }
+
+    // Update user notifications
     const notification = user.notification || [];
     notification.push({
-      type: "Status-UPATED",
+      type: "Status-UPDATED",
       message: `Your appointment has been updated to ${status}`,
       onClickPath: "/doctor-appointments",
     });
     user.notification = notification;
     await user.save();
 
+    // Log before sending email
+    console.log(`Sending email to: ${user.email}`);
+
+    // Send email notification if the status is approved
+    if (status === 'approve') {
+      const mailOptions = {
+        from: process.env.EMAIL, 
+        to: user.email,
+        subject: 'Appointment Confirmed',
+        text: `Dear ${user.name},\n\nYour appointment with Dr. ${doctor.firstName} ${doctor.lastName} has been confirmed.\n\nDate: ${moment(appointment.date).format("DD-MM-YYYY")}\nTime: ${moment(appointment.time).format("HH:mm")}\n\nThank you for using our service.\n\nBest regards,\nYour Clinic`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email: ', error);
+        } else {
+          console.log('Email sent: ', info.response);
+        }
+      });
+    }
+
     res.status(200).send({ success: true, message: "Appointment status updated" });
   } catch (error) {
-    console.log(error);
+    console.error("Unable to change Appointment status: ", error);
     res.status(500).send({ success: false, message: "Unable to change Appointment status", error });
   }
 };
